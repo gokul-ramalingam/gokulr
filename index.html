@@ -1540,6 +1540,13 @@
     /* RESPONSIVE */
     @media (max-width: 900px) {
       .hero-grid, .about-grid, .contact { grid-template-columns:1fr; }
+
+      /* Mobile order: hero visual first, then hero copy.
+         About copy first, portrait second. */
+      .hero-art { order: -1; }
+      .hero-copy { order: 1; }
+      .about { order: -1; }
+      .portrait { order: 1; }
       .hero-art { min-height:360px; }
       .impact-grid { grid-template-columns:1fr; }
       .impact-intro { grid-template-columns:1fr; gap:24px; }
@@ -1573,6 +1580,136 @@
       .contact { gap:35px; }
     }
   </style>
+
+<!-- responsive hardening: keep the layout stable from compact phones through large desktop -->
+<style>
+  html, body { max-width: 100%; overflow-x: clip; }
+  .container, .hero-grid, .about-grid, .contact, .toolbox-grid, .showcase-grid,
+  .impact-grid, .experience, .timeline-row { min-width: 0; }
+  .hero-copy, .hero-art, .about, .portrait, .contact-list, .section-title,
+  .tool-card, .project, .impact-card { min-width: 0; }
+  .hero-copy h1, .section-title h2, .about h2, .impact-intro h2, .contact h2,
+  .tool-card h3, .project h3, .experience-item h3 { overflow-wrap: anywhere; }
+
+  @media (min-width: 901px) and (max-width: 1180px) {
+    .hero { padding-top: 72px; }
+    .hero-grid { gap: 32px; min-height: 500px; }
+    .hero-copy h1 { font-size: clamp(52px, 6vw, 68px); }
+    .hero-art { min-height: 460px; }
+    .about-grid { grid-template-columns: minmax(280px, 34%) minmax(0, 1fr); gap: 48px; }
+    .portrait { min-height: 430px; }
+    .contact { grid-template-columns: minmax(0, 1fr) minmax(300px, .72fr); gap: 42px; }
+  }
+
+  @media (max-width: 900px) {
+    .hero-grid, .about-grid, .contact { min-width: 0; }
+    .hero-copy, .hero-art, .about, .portrait { width: 100%; min-width: 0; }
+
+    /* Mobile composition: visual first, copy second. */
+    .hero-art {
+      order: -1;
+      min-height: 0;
+      height: clamp(300px, 78vw, 360px);
+      padding: 0;
+      isolation: isolate;
+    }
+    .hero-copy { order: 1; }
+    .about { order: -1; }
+    .portrait { order: 1; }
+    .about-grid { gap: 35px; }
+    .portrait { min-height: clamp(300px, 58vw, 420px); }
+
+    /* Keep the terminal fully inside the hero artwork on narrow screens. */
+    .hero-art .terminal {
+      left: 14px;
+      right: 14px;
+      top: 14px;
+      bottom: 94px;
+      min-width: 0;
+      overflow: hidden;
+    }
+    .hero-art .hero-spectrum {
+      left: 14px;
+      right: 14px;
+      bottom: 12px;
+      width: auto;
+    }
+  }
+
+  @media (max-width: 760px) {
+    /* Keep skill tags compact and consistent on tablets/phones. */
+    .tags { gap: 6px; }
+    .tag {
+      min-height: 28px;
+      padding: 5px 7px;
+      font-size: 10px;
+      line-height: 1.2;
+      letter-spacing: .005em;
+      white-space: nowrap;
+    }
+    .impact-tags { gap: 6px; }
+    .impact-tag {
+      padding: 5px 8px;
+      font-size: 10px;
+      line-height: 1.2;
+    }
+
+    .nav-inner { gap: 12px; }
+    .nav-cta { flex: 0 0 auto; white-space: nowrap; }
+    .hero-grid { gap: 30px; }
+    .hero-art { height: clamp(340px, 82vw, 370px); }
+    .terminal { line-height: 1.55; bottom: 98px; overflow: visible; }
+    .terminal .dots { margin-bottom: 18px; }
+    .hero-spectrum { left: 12px; right: 12px; bottom: 14px; height: 64px; }
+    .hero-spectrum-item { padding: 24px 2px 0; font-size: clamp(7px, 2.25vw, 9px); letter-spacing: .07em; }
+    .hero-spectrum-item small { font-size: clamp(6px, 1.8vw, 8px); letter-spacing: .05em; }
+    .timeline-row { min-width: 0; }
+    .timeline-row > * { min-width: 0; overflow-wrap: anywhere; }
+    .impact-footer strong { max-width: 100%; }
+    .contact-row { min-width: 0; }
+    .contact-row span { overflow-wrap: anywhere; }
+  }
+
+  @media (max-width: 420px) {
+    .tag {
+      min-height: 26px;
+      padding: 4px 6px;
+      font-size: 9px;
+    }
+    .impact-tag {
+      padding: 4px 7px;
+      font-size: 9px;
+    }
+    .container { width: calc(100% - 28px); }
+    nav { height: 60px; }
+    .brand { font-size: 15px; }
+    .nav-cta { padding: 8px 10px; font-size: 9px; }
+    .hero { padding-top: 42px; }
+    .hero-grid { gap: 26px; }
+    .hero-copy h1 { font-size: clamp(40px, 12vw, 48px); }
+    .hero-copy p { font-size: 13px; line-height: 1.7; }
+    .actions .btn { min-height: 44px; }
+    .hero-art { height: 350px; }
+    .terminal { left: 12px; right: 12px; top: 12px; bottom: 92px; padding: 12px; font-size: 9px; line-height: 1.55; overflow: visible; }
+    .terminal .dots { margin-bottom: 15px; }
+    .hero-spectrum { left: 10px; right: 10px; bottom: 11px; height: 58px; }
+    .hero-spectrum-item { padding-top: 22px; font-size: 7px; }
+    .hero-spectrum-item small { margin-top: 5px; font-size: 6px; }
+    .portrait { min-height: 320px; }
+    .impact-card { min-height: 0; }
+    .project { min-height: 220px; }
+    .contact-row { padding: 12px; }
+  }
+
+  @media (max-width: 340px) {
+    .container { width: calc(100% - 24px); }
+    .hero-copy h1 { font-size: 38px; }
+    .hero-art { height: 340px; }
+    .terminal { font-size: 8.5px; bottom: 88px; }
+    .hero-spectrum-item { font-size: 6.5px; letter-spacing: .045em; }
+    .hero-spectrum-item small { font-size: 5.5px; }
+  }
+</style>
 </head>
 
 <body>
